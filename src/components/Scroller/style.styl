@@ -1,0 +1,84 @@
+.Scroller
+    background: #fff
+    display flex
+    flex-direction: column
+    margin 0 auto
+    border: 1px solid #F2F2F2;
+    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+    border-radius: 16px;
+    
+    .wrap
+        width 320px
+        flex-grow: 1
+        display: flex
+        overflow hidden
+        padding 16px
+        
+    .pseudoscroll
+        width 24px
+        display: flex
+        justify-content: center
+        transform: translateX(-10px)
+        padding-top 23px
+        padding-bottom 23px
+
+        .track 
+            width 5px
+            height 100%
+            background: #D8E4EF
+            position relative
+            will-change: transform
+
+            .caret
+                width 23px
+                height 23px
+                background: #2462db
+                border-radius: 50%
+                will-change: transform
+                position: absolute
+                top 0
+                left calc((23px - 5px) / 2 * -1)
+                cursor grab
+
+                &.pressed
+                    cursor grabbing
+
+    .contentSignals
+        width 100%
+        overflow: hidden
+        will-change: transform
+
+        .wraperSignals
+            will-change: transform
+
+            .instrument
+                height 73px
+                display flex
+                align-items: center
+                justify-content: space-between
+                border-bottom: 1px solid #fff
+                padding-left 8px
+                padding-right 8px
+                user-select none
+                transition: background .3s ease-in-out
+
+                &.hovered
+                    background: #F0F9FF
+
+                    .title
+                        color #3C73F1
+                        transition: color .3s ease-in-out
+
+                .title
+                    font-family 'Arial'
+                    font-weight 400
+                    font-size 16px
+                    color #8C8C8C
+                    transition: color .3s ease-in-out
+
+                .count
+                    font-family 'Arial'
+                    font-style normal
+                    font-weight 400
+                    font-size 16px
+                    color: #3C73F1

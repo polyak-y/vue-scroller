@@ -1,0 +1,30 @@
+<div class="Scroller">
+    <div class="wrap">
+        <div class="pseudoscroll">
+            <div 
+                class="track" 
+                ref="track"
+            >
+                <div 
+                    class="caret" 
+                    :class="caretClass"
+                    ref="caret"
+                    @pointerdown="pointerdownHandler"
+                ></div>
+            </div>
+        </div>
+
+        <div class="contentSignals" ref="signals">
+            <div class="wraperSignals" ref="wrapSignals">
+                <div 
+                    v-for="(signal, index) in arrSignals"
+                    class="instrument"
+                    :class="{hovered: index === indexHovered}"
+                    >
+                    <span class="title">{{ signal.title }}</span>
+                    <span class="count">{{ signal.count }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
