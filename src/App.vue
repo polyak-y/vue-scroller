@@ -34,5 +34,6 @@ export default {
     min-height calc(100vh - 16px)
     max-height calc(100vh - 16px)
     margin 0
+    overflow hidden
 
 </style>
