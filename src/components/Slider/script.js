@@ -6,5 +6,9 @@ export default {
         }
     },
     computed: {},
-    methods: {}
+    methods: {
+      nextSlide() {
+        console.log(134)
+      }
+    }
 }
