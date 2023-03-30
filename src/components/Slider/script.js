@@ -4,7 +4,8 @@ export default {
         return {
           slidersArr: [1,2,3,4,5,6,7],
           first: null,
-          time: 500
+          time: 500,
+          stopClick: false
         }
     },
     computed: {
@@ -16,11 +17,14 @@ export default {
     },
     methods: {
       nextSlide() {
+        if (this.stopClick) return;
         this.first = this.slidersArr[0];
         this.slidersArr = this.slidersArr.filter((item, index) => index !== 0)
+        this.stopClick = true;
       },
       beforeEnter(el) {
         el.style.opacity = 0
+        this.stopClick = false;
       },
       enter(el, done) {
         let start = null;
