@@ -1,5 +1,10 @@
+import SliderItem from "./SliderItem";
+
 export default {
     name: "Slider",
+    components: {
+      SliderItem
+    },
     data() {
         return {
           slidersArr: [1,2,3,4,5,6,7],
