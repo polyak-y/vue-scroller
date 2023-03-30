@@ -2,9 +2,13 @@
     flex-grow 1
     min-height 100%
     position relative
-    perspective: 900px;
+    overflow hidden
 
-    .slideElement
+    .animate
+      min-height 100%
+      perspective: 900px;
+
+      .slideElement
         width 90%
         height 100%
         display: flex
@@ -21,27 +25,9 @@
         top 0
         transform-style: preserve-3d;
 
-        &:nth-child(1)
-            transform: translate3d(0, 0, 0)
-            z-index 7
-        &:nth-child(2)
-            transform: translate3d(7%, 0, -100px)
-            z-index 6
-        &:nth-child(3)
-            transform: translate3d(14%, 0, -200px)
-            z-index 5
-        &:nth-child(4)
-            transform: translate3d(21%, 0, -300px)
-            z-index 4
-        &:nth-child(5)
-            transform: translate3d(28%, 0,-400px)
-            z-index 3
-        &:nth-child(6)
-            transform: translate3d(35%, 0, -500px)
-            z-index 2
-        &:nth-child(7)
-            transform: translate3d(42%, 0, -600px)
-            z-index 1
+        &:not(:first-child)
+          transition transform var(--time) ease-in-out
+          transition-delay: var(--time);
 
     button
         width 50px
@@ -57,4 +43,37 @@
         font-size 20px
         cursor pointer
         z-index 10
-   
+
+.animate-block {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-name: fadeOutLeft;
+}
+
+.animate-fadeIn {
+  animation-duration: 1s;
+  animation-fill-mode: both;
+  animation-name: fadeOutLeft;
+}
+
+@keyframes fadeIn {
+  from {
+      opacity: 0;
+  }
+
+  to {
+      opacity: 1;
+  }
+}
+
+@keyframes fadeOutLeft {
+  from {
+    opacity: 1;
+  }
+
+  to {
+    opacity: 0;
+    -webkit-transform: translate3d(-100%, 0, 0);
+    transform: translate3d(-100%, 0, 0);
+  }
+}

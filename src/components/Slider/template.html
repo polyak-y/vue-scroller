@@ -1,7 +1,22 @@
-<div class="Slider" >
-    <div class="slideElement" v-for="count in 7">
-        {{ count }}
-    </div>
+<div class="Slider" :style="rootStyle">
+    <transition-group
+        name="list"
+        :css="false"
+        class="animate"
+        tag="div"
+        @before-enter="beforeEnter"
+        @enter="enter"
+        @leave="leave"
+    >
+        <div
+            v-for="(count, index) in slidersArr"
+            :key="count"
+            class="slideElement"
+            :style="{transform: `translate3d(${index * 7}%, 0, -${index * 100}px)`, zIndex: slidersArr.length - index }"
+        >
+           Slider {{ count }}
+        </div>
+    </transition-group>
 
     <button @click="nextSlide">></button>
 </div>
