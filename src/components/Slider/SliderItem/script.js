@@ -7,8 +7,8 @@ export default {
         lengthArr: {
             type: Number
         },
-        count: {
-            type: Number
+        src: {
+            type: String
         }
     },
     computed: {

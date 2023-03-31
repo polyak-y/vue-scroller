@@ -3,29 +3,14 @@ export default {
     data() {
         return {
             arrSignals: [
-                {id: 1, title: "Все", count: 1457 },
-                {id: 2, title: "AUDJPY", count: 20 },
-                {id: 3, title: "AUDACD", count: 17 },
-                {id: 4, title: "AUDUSD", count: 37},
-                {id: 5, title: "CADCHF", count: 5 },
-                {id: 6, title: "CADJPY", count: 14 },
-                {id: 7, title: "CADUSD", count: 21 },
-                {id: 8, title: "CHFHUF", count: 19 },
-                {id: 9, title: "GBPUSD", count: 21 },
-                {id: 10, title: "CADJPY", count: 45 },
-                {id: 11, title: "USDJPY", count: 8 },
-                {id: 12, title: "USDRUB", count: 17 },
-                {id: 13, title: "IUYGBN", count: 21 },
-                {id: 14, title: "PLOTGB", count: 19 },
-                {id: 15, title: "TREDCV", count: 21 },
-                {id: 16, title: "NJUREW", count: 45 },
-                {id: 17, title: "RYHNJI", count: 8 },
-                {id: 18, title: "KIUIKM", count: 17 },
-                {id: 19, title: "IUYTGB", count: 19 },
-                {id: 20, title: "MKOUHB", count: 21 },
-                {id: 21, title: "BGTYFV", count: 45 },
-                {id: 21, title: "EDCDER", count: 8 },
-                {id: 23, title: "OIUYTR", count: 17 }
+                {id: 3, title: "Города", part: "city" },
+                {id: 1, title: "Природа", part: "tree" },
+                {id: 2, title: "Животные", part: "animal" },
+                {id: 4, title: "Море и океан", part: "sea" },
+                {id: 5, title: "Машины", part: "car" },
+                {id: 6, title: "Рыбы", part: "fish" },
+                {id: 7, title: "Люди", part: "man-and-woman" },
+                {id: 8, title: "Насекомые", part: "bug" },
             ],
             indexHovered: 0,
             pressed: false,
@@ -45,6 +30,10 @@ export default {
             }
         }
     },
+    created() {
+        console.log("created");
+        this.$emit("setPart", this.arrSignals[0].part)
+    },
     methods: {
         getCoordinate() {
             const allblocks = document.querySelectorAll(".instrument")
@@ -61,7 +50,7 @@ export default {
             const caretElTop = this.caretEl.getBoundingClientRect().top;
             const getCoordinate = this.getCoordinate();
 
-            const index = getCoordinate.findIndex(offsetTop => offsetTop > caretElTop)
+            const index = getCoordinate.findIndex(offsetTop => offsetTop > caretElTop);
             this.indexHovered = index > -1 ? index - 1 : getCoordinate.length - 1;
 
             if (diff <= 0) {
@@ -69,13 +58,12 @@ export default {
                 return;
             } 
             if (diff >= this.maxPosition) {
-                this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`
+                this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`;
                 return
             }
             this.caretEl.style.transform = `translate3d(0, ${diff}px, 0)`
             if (diff < this.maxScroll)
-                this.wrapSignalsEl.style.transform = `translate3d(0, ${diff * -1}px, 0)`
-
+                this.wrapSignalsEl.style.transform = `translate3d(0, ${diff * -1}px, 0)`;
         },
         poiterUpHandler() {
             document.onpointermove = null; //очищаем события
@@ -88,6 +76,8 @@ export default {
             this.currentPosition = null;
             this.maxPosition = null;
             this.maxScroll = null;
+            const findPart = this.arrSignals.find((_, index) => index === this.indexHovered)
+            this.$emit("setPart", findPart.part)
         },
         pointerdownHandler(e) {
             this.pressed = true;
@@ -95,13 +85,11 @@ export default {
             this.trackEl = this.$refs.track;
             this.wrapSignalsEl = this.$refs.wrapSignals;
             this.firstCoordinate = e.pageY;
-            this.currentPosition = (new WebKitCSSMatrix(getComputedStyle(this.caretEl).transform)).m42
+            this.currentPosition = (new WebKitCSSMatrix(getComputedStyle(this.caretEl).transform)).m42;
             this.maxPosition = this.trackEl.clientHeight - this.caretEl.clientHeight;
-            this.maxScroll = this.$refs.signals.scrollHeight - this.$refs.signals.clientHeight
+            this.maxScroll = this.$refs.signals.scrollHeight - this.$refs.signals.clientHeight;
 
-            
             document.onpointermove = this.pointerMoveHandler //тащим ползунок
-
             document.onpointerup = this.poiterUpHandler // отпускаем ползунок и очищаем события
         }
     }

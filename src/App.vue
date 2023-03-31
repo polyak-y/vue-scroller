@@ -1,7 +1,7 @@
 <template>
   <div class="App">
-    <Scroller />
-    <Slider />
+    <Scroller @setPart="setPart"/>
+    <Slider :partSliders="partSliders" />
   </div>
 </template>
 
@@ -14,11 +14,23 @@ export default {
   components: {
     Scroller,
     Slider
+  },
+  data() {
+    return {
+      partSliders: ""
+    }
+  },
+  methods: {
+    setPart(val) {
+      this.partSliders = val;
+    }
   }
 }
 </script>
 
 <style lang="stylus">
+  :root
+    --index: calc(1vh + 1vw)
 
   body * 
     margin 0

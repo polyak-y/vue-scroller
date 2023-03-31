@@ -9,13 +9,18 @@
         @leave="leave"
     >
         <SliderItem
-            v-for="(count, index) in slidersArr"
-            :key="count"
+            v-for="(src, index) in slidersArr"
+            :key="src"
             :index="index"
-            :count="count"
+            :src="src"
             :lengthArr="slidersArr.length"
         />
     </transition-group>
 
-    <button @click="nextSlide">></button>
+    <img 
+        class="buttonImg" 
+        alt=""
+        :src="require('../../images/arrow-right.svg')" 
+        @click="nextSlide" 
+    />
 </div>

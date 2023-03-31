@@ -2,23 +2,23 @@
     flex-grow 1
     min-height 100%
     position relative
-    overflow hidden
 
     .animate
       min-height 100%
       perspective: 900px;
       
-    button
-        width 50px
-        height 150px
-        background: linear-gradient(180deg, #719CFF 0%, #2A60DC 100%)
+    .buttonImg
+        width calc(var(--index) * 3.5)
+        height calc(var(--index) * 3.5)
         position: absolute
         right 20px
         top 50%
         transform: translateY(-50%)
-        outline 0
-        border 0
-        color #fff
-        font-size 20px
         cursor pointer
         z-index 10
+        transition transform .3s ease-in-out
+
+
+        &:hover 
+          transform translateY(-50%) scale(1.1)
+          

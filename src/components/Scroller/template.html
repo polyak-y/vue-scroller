@@ -22,7 +22,7 @@
                     :class="{hovered: index === indexHovered}"
                     >
                     <span class="title">{{ signal.title }}</span>
-                    <span class="count">{{ signal.count }}</span>
+                    <img class="image" :src="require(`../../images/${signal.part}.svg`)" alt="">
                 </div>
             </div>
         </div>

@@ -1,13 +1,19 @@
 import SliderItem from "./SliderItem";
+import { getArrImages } from "../../utils/arrImages";
 
 export default {
     name: "Slider",
+    props: {
+      partSliders: {
+        type: String
+      }
+    },
     components: {
       SliderItem
     },
     data() {
         return {
-          slidersArr: [1,2,3,4,5,6,7],
+          slidersArr: [],
           first: null,
           time: 500,
           stopClick: false
@@ -20,11 +26,19 @@ export default {
         }
       }
     },
+    watch: {
+      partSliders(val) {
+        this.slidersArr = getArrImages()[val]
+      }
+    },
+    mounted() {
+      this.slidersArr = getArrImages()[this.partSliders]
+    },
     methods: {
       nextSlide() {
         if (this.stopClick) return;
         this.first = this.slidersArr[0];
-        this.slidersArr = this.slidersArr.filter((item, index) => index !== 0)
+        this.slidersArr = this.slidersArr.filter((_, index) => index !== 0)
         this.stopClick = true;
       },
       beforeEnter(el) {
