@@ -1,17 +1,12 @@
 export default {
     name: "Scroller",
+    props: {
+        arrSignals: {
+            type: Array
+        }
+    },
     data() {
         return {
-            arrSignals: [
-                {id: 3, title: "Города", part: "city" },
-                {id: 1, title: "Природа", part: "tree" },
-                {id: 2, title: "Животные", part: "animal" },
-                {id: 4, title: "Море и океан", part: "sea" },
-                {id: 5, title: "Машины", part: "car" },
-                {id: 6, title: "Рыбы", part: "fish" },
-                {id: 7, title: "Люди", part: "man-and-woman" },
-                {id: 8, title: "Насекомые", part: "bug" },
-            ],
             indexHovered: 0,
             pressed: false,
             caretEl: null,
@@ -30,10 +25,6 @@ export default {
             }
         }
     },
-    created() {
-        console.log("created");
-        this.$emit("setPart", this.arrSignals[0].part)
-    },
     methods: {
         getCoordinate() {
             const allblocks = document.querySelectorAll(".instrument")
@@ -42,7 +33,7 @@ export default {
                 const top = node.getBoundingClientRect().top;
                 arr[index] = top;
             })
-            return arr
+            return arr;
         },
         pointerMoveHandler(event) {
             const currentCoordinate = event.pageY;
@@ -61,7 +52,7 @@ export default {
                 this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`;
                 return
             }
-            this.caretEl.style.transform = `translate3d(0, ${diff}px, 0)`
+            this.caretEl.style.transform = `translate3d(0, ${diff}px, 0)`;
             if (diff < this.maxScroll)
                 this.wrapSignalsEl.style.transform = `translate3d(0, ${diff * -1}px, 0)`;
         },
@@ -76,8 +67,8 @@ export default {
             this.currentPosition = null;
             this.maxPosition = null;
             this.maxScroll = null;
-            const findPart = this.arrSignals.find((_, index) => index === this.indexHovered)
-            this.$emit("setPart", findPart.part)
+            const findPart = this.arrSignals.find((_, index) => index === this.indexHovered);
+            this.$emit("setPart", findPart.part);
         },
         pointerdownHandler(e) {
             this.pressed = true;

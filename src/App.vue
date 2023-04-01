@@ -1,13 +1,24 @@
 <template>
   <div class="App">
-    <Scroller @setPart="setPart"/>
-    <Slider :partSliders="partSliders" />
+    <Scroller :arrSignals="arrSignals" @setPart="setPart"/>
+    <Slider :partSliders="partSliders"/>
   </div>
 </template>
 
 <script>
 import Scroller from "./components/Scroller";
 import Slider from "./components/Slider";
+
+const arrSignals=  [
+    {id: 3, title: "Города", part: "city" },
+    {id: 2, title: "Животные", part: "animal" },
+    {id: 1, title: "Природа", part: "nature" },
+    {id: 4, title: "Море и океан", part: "sea" },
+    {id: 5, title: "Машины", part: "car" },
+    {id: 6, title: "Рыбы", part: "fish" },
+    {id: 7, title: "Люди", part: "people" },
+    {id: 8, title: "Насекомые", part: "bug" }
+]
 
 export default {
   name: 'App',
@@ -17,7 +28,8 @@ export default {
   },
   data() {
     return {
-      partSliders: ""
+      partSliders: arrSignals[0].part,
+      arrSignals: arrSignals
     }
   },
   methods: {
@@ -47,5 +59,4 @@ export default {
     max-height calc(100vh - 16px)
     margin 0
     overflow hidden
-
 </style>

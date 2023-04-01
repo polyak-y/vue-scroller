@@ -1,6 +1,6 @@
 <div class="Scroller">
     <div class="wrap">
-        <div class="pseudoscroll">
+        <div class="pseudoScroll">
             <div 
                 class="track" 
                 ref="track"
@@ -15,12 +15,12 @@
         </div>
 
         <div class="contentSignals" ref="signals">
-            <div class="wraperSignals" ref="wrapSignals">
+            <div class="wrapperSignals" ref="wrapSignals">
                 <div 
                     v-for="(signal, index) in arrSignals"
                     class="instrument"
                     :class="{hovered: index === indexHovered}"
-                    >
+                >
                     <span class="title">{{ signal.title }}</span>
                     <img class="image" :src="require(`../../images/${signal.part}.svg`)" alt="">
                 </div>

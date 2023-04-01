@@ -3,22 +3,31 @@
     min-height 100%
     position relative
 
-    .animate
-      min-height 100%
-      perspective: 900px;
-      
+    .groupSlider
+      height 100%
+
+      .animate
+        min-height 100%
+        perspective 900px
+        
     .buttonImg
         width calc(var(--index) * 3.5)
         height calc(var(--index) * 3.5)
-        position: absolute
+        position absolute
         right 20px
         top 50%
-        transform: translateY(-50%)
+        transform translateY(-50%)
         cursor pointer
         z-index 10
         transition transform .3s ease-in-out
 
-
         &:hover 
           transform translateY(-50%) scale(1.1)
-          
+
+.fade-enter-active,
+.fade-leave-active
+  transition opacity 1s ease
+
+.fade-enter,
+.fade-leave-to
+  opacity 0

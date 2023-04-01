@@ -1,21 +1,29 @@
 <div class="Slider" :style="rootStyle">
-    <transition-group
-        name="list"
-        :css="false"
-        class="animate"
-        tag="div"
-        @before-enter="beforeEnter"
-        @enter="enter"
-        @leave="leave"
-    >
-        <SliderItem
-            v-for="(src, index) in slidersArr"
-            :key="src"
-            :index="index"
-            :src="src"
-            :lengthArr="slidersArr.length"
-        />
-    </transition-group>
+    <transition name="fade" appear mode="out-in">
+        <div 
+            v-if="slidersArr.length > 0"
+            class="groupSlider" 
+            :key="partSliders"
+        >
+            <transition-group
+                name="list"
+                :css="false"
+                class="animate"
+                tag="div"
+                @before-enter="beforeEnter"
+                @enter="enter"
+                @leave="leave"
+            >
+                <SliderItem
+                    v-for="(src, index) in slidersArr"
+                    :key="src"
+                    :index="index"
+                    :src="src"
+                    :lengthArr="slidersArr.length"
+                />
+            </transition-group>
+        </div>
+    </transition>
 
     <img 
         class="buttonImg" 
