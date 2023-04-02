@@ -17,7 +17,7 @@ export default {
             return {
                 transform: `translate3d(${this.index * 7}%, 0, -${this.index * 100}px)`, 
                 zIndex: this.lengthArr - this.index,
-                background: `url(${url}) no-repeat left top / cover`
+                background: `url(${url}) no-repeat left top / cover #fff`
             }
         }
     }
