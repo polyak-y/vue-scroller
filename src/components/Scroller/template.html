@@ -9,7 +9,7 @@
                     class="caret" 
                     :class="caretClass"
                     ref="caret"
-                    @pointerdown.stop="pointerdownHandler"
+                    @pointerdown.stop.prevent="pointerdownHandler"
                 ></div>
             </div>
         </div>
