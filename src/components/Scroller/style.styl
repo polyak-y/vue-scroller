@@ -12,6 +12,9 @@
         display flex
         overflow hidden
         padding 16px
+
+        @media(max-width: 780px)
+            width: 100px
         
     .pseudoScroll
         width 24px
@@ -75,6 +78,12 @@
                     color #8C8C8C
                     transition color .3s ease-in-out
 
+                    @media(max-width: 780px)
+                        display none
+
                 .image
                     height 50px
                     width auto
+
+                    @media(max-width: 780px)
+                       height 40px
