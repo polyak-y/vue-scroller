@@ -57,6 +57,7 @@ export default {
         if (value < 1) {
           return window.requestAnimationFrame(animate);
         }
+        el.style.opacity = 1;
         done();
       })
     },

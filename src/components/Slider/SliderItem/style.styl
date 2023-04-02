@@ -1,7 +1,7 @@
 .SliderItem
     width 90%
     height 100%
-    display flex
+    display inline-flex
     justify-content center
     align-items center
     background #fff
@@ -10,18 +10,12 @@
     border 1px solid #ddd
     box-shadow 0 0 8px rgba(0,0,0,.1)
     border-radius 8px
+    transform-style preserve-3d
     position absolute
     left 0
     top 0
-    transform-style preserve-3d
 
     &:not(:first-child)
+        will-change: transform
         transition transform var(--time) ease-in-out
         transition-delay var(--time)
-
-    img 
-        width 100%
-        height 100%
-        display block
-        border-radius 8px
-        object-fit cover
