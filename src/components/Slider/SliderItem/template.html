@@ -1,1 +1,9 @@
-<div class="SliderItem" :style="rootStyle"></div>
+<div class="SliderItem" :style="rootStyle">
+    <transition name="fade" appear>
+        <div 
+            v-if="backgroundSrcImage"
+            class="imageContainer"
+            :style="imageBlockStyle"
+        ></div>
+    </transition>
+</div>

@@ -11,14 +11,30 @@ export default {
             type: String
         }
     },
+    data() {
+        return {
+            backgroundSrcImage: null
+        }
+    },
     computed: {
         rootStyle() {
-            const url = require(`../../../images/${this.src}`);
             return {
                 transform: `translate3d(${this.index * 7}%, 0, -${this.index * 100}px)`, 
-                zIndex: this.lengthArr - this.index,
-                background: `url(${url}) no-repeat left top / cover #fff`
+                zIndex: this.lengthArr - this.index                
+            }
+        },
+        imageBlockStyle() {
+            return {
+                background: `url(${this.backgroundSrcImage}) no-repeat left top / cover #fff`
             }
         }
+    },
+    mounted() {
+        const img = new Image();
+        const url = require(`../../../images/${this.src}`);
+        img.src = url;
+        img.addEventListener("load", () => {
+            this.backgroundSrcImage = url;
+        })
     }
 }
