@@ -24,6 +24,7 @@ export default {
             }
         },
         imageBlockStyle() {
+            if (!this.backgroundSrcImage) return false;
             return {
                 background: `url(${this.backgroundSrcImage}) no-repeat left top / cover #fff`
             }
