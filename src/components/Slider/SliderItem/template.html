@@ -1,4 +1,9 @@
-<div class="SliderItem" :style="rootStyle">
+<div 
+    class="SliderItem" 
+    :style="rootStyle"
+    @touchstart="touchstartHandler"
+    @touchmove="touchmoveHandler"
+>
     <transition name="fade" appear>
         <div 
             v-if="imageBlockStyle"

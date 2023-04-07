@@ -9,10 +9,14 @@ export default {
         },
         src: {
             type: String
+        },
+        nextSlide: {
+            type: Function
         }
     },
     data() {
         return {
+            x1: null,
             backgroundSrcImage: null
         }
     },
@@ -37,5 +41,19 @@ export default {
         img.addEventListener("load", () => {
             this.backgroundSrcImage = url;
         })
+    },
+    methods: {
+        touchstartHandler(e) {
+            const firstTouch = e.touches[0];
+            this.x1 = firstTouch.clientX
+        },
+        touchmoveHandler(e) {
+            if (!this.x1) return;
+            let x2 = e.touches[0].clientX
+            let xDiff = x2 - this.x1
+            if (xDiff < -90) {
+                this.nextSlide()
+            }
+        }
     }
 }
