@@ -82,6 +82,22 @@ export default {
 
             document.onpointermove = this.pointerMoveHandler //тащим ползунок
             document.onpointerup = this.poiterUpHandler // отпускаем ползунок и очищаем события
+        },
+        goToSection(e, ind) {
+            if (ind === this.indexHovered) return;
+            const findPart = this.arrSignals.find((_, index) => index === ind);
+            this.$emit("setPart", findPart.part);
+            this.indexHovered = ind;
+
+            const caret = this.$refs.caret;
+            const target = e.currentTarget;
+            const targetTop = target.getBoundingClientRect().top;
+            const caretTop = caret.getBoundingClientRect().top;
+            const maxScroll = this.$refs.signals.scrollHeight - this.$refs.signals.clientHeight;
+            const caretPosition = (new WebKitCSSMatrix(getComputedStyle(caret).transform)).m42;
+            console.log(targetTop - caretTop);
+            console.log({ maxScroll, caretPosition })
+
         }
     }
 }
