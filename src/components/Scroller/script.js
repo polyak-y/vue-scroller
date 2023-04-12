@@ -90,13 +90,56 @@ export default {
             this.indexHovered = ind;
 
             const caret = this.$refs.caret;
+            const wrapSignals = this.$refs.wrapSignals;
             const target = e.currentTarget;
             const targetTop = target.getBoundingClientRect().top;
             const caretTop = caret.getBoundingClientRect().top;
+
             const maxScroll = this.$refs.signals.scrollHeight - this.$refs.signals.clientHeight;
+            console.log('maxScroll', maxScroll)
             const caretPosition = (new WebKitCSSMatrix(getComputedStyle(caret).transform)).m42;
-            console.log(targetTop - caretTop);
-            console.log({ maxScroll, caretPosition })
+            const wrapSignalsPosition = (new WebKitCSSMatrix(getComputedStyle(caret).transform)).m42;
+
+            const distance = targetTop - caretTop; // на какое количество пикселей цель находится от каретки
+            const vektor = distance < 0 ? "top" : "bottom";
+
+            console.log("на каком расстоянии цель от каретки:", distance + "px");
+
+            if (vektor === "bottom") { // нажал вниз
+                // this.goBottom()
+                let diff = maxScroll - caretPosition; // смотрим сколько скролла еще осталось от каретки
+                if (diff < 0) diff = 0;
+                console.log("сколько еще скролла от начального положения каретки вниз:", diff + "px")
+                console.log("текущее положение скролла:", wrapSignalsPosition + "px")
+                console.log('текущее положение каретки', caretPosition + "px")
+
+                // сколько надо проскролить каретку
+                let scrollingCaret;
+                // сколько надо проскролить вверх контент
+                let scrollingContent
+
+                if (distance / 2 <= diff) {
+                    console.log(1);
+                    scrollingCaret = distance / 2;
+                    scrollingContent = distance / 2;
+                } else if (distance > diff && diff > 0) {
+                    console.log(2);
+                    scrollingContent = diff;
+                    scrollingCaret = diff + (distance - (diff * 2));
+                } else if (diff === 0) { 
+                    scrollingCaret = distance;
+                }
+
+                // console.log({ scrollingCaret,  scrollingContent, wrapSignalsPosition });
+
+                caret.style.transform = `translate3d(0px, ${caretPosition + scrollingCaret}px, 0px)`
+                wrapSignals.style.transform = `translate3d(0px, ${(wrapSignalsPosition * -1) - scrollingContent}px, 0px)`
+            } else {
+                // this.goTop();
+            }
+
+            // console.log(targetTop - caretTop); // насколько надо переместить ползунок
+            // console.log({ maxScroll, caretPosition })
 
         }
     }

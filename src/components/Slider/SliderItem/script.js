@@ -51,7 +51,7 @@ export default {
             if (!this.x1) return;
             let x2 = e.touches[0].clientX
             let xDiff = x2 - this.x1
-            if (xDiff < -90) {
+            if (xDiff < -50) {
                 this.nextSlide()
             }
         }
