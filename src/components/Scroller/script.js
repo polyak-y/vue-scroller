@@ -36,45 +36,6 @@ export default {
             })
             return arr;
         },
-        pointerMoveHandler(event) {
-            const currentCoordinate = event.pageY;
-            const diff = this.currentPosition + (currentCoordinate - this.firstCoordinate);
-            const diffScroll = this.dopPixel ? diff + (diff * this.dopPixel) : diff;
-            const caretElTop = this.caretEl.getBoundingClientRect().top;
-            const getCoordinate = this.getCoordinate();
-
-            const index = getCoordinate.findIndex(offsetTop => offsetTop > caretElTop);
-            this.indexHovered = index > -1 ? index - 1 : getCoordinate.length - 1;
-
-            if (diff <= 0) {
-                console.log("g")
-                this.caretEl.style.transform = "translate3d(0, 0, 0)";
-                return;
-            } 
-            if (diff >= this.maxPosition) {
-                console.log("m", this.maxPosition)
-                this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`;
-                return
-            }
-            this.caretEl.style.transform = `translate3d(0, ${diff}px, 0)`;
-            if (diff < this.maxScroll)
-                console.log("g")
-                this.wrapSignalsEl.style.transform = `translate3d(0, ${diffScroll * -1}px, 0)`;
-        },
-        poiterUpHandler() {
-            document.onpointermove = null; //очищаем события
-            document.onpointerup = null; // очищаем события  
-            this.pressed = false;
-            this.caretEl = null;
-            this.trackEl = null;
-            this.wrapSignalsEl = null;
-            this.firstCoordinate = null;
-            this.currentPosition = null;
-            this.maxPosition = null;
-            this.maxScroll = null;
-            const findPart = this.arrSignals.find((_, index) => index === this.indexHovered);
-            this.$emit("setPart", findPart.part);
-        },
         pointerdownHandler(e) {
             this.pressed = true;
             this.caretEl = this.$refs.caret;
@@ -82,17 +43,65 @@ export default {
             this.wrapSignalsEl = this.$refs.wrapSignals;
             this.firstCoordinate = e.pageY;
             this.currentPosition = (new WebKitCSSMatrix(getComputedStyle(this.caretEl).transform)).m42;
+            // максимальная позиция каретки (на какое расстояние она может опуститься)
             this.maxPosition = this.trackEl.clientHeight - this.caretEl.clientHeight;
+            // максимальный скролл контента
             this.maxScroll = this.$refs.signals.scrollHeight - this.$refs.signals.clientHeight;
 
-            const wrapSignals = this.$refs.wrapSignals;
-            let diff = wrapSignals.getBoundingClientRect().height - (this.trackEl.getBoundingClientRect().height * 2);
-            console.log("diff", diff)
-            this.dopPixel = diff <= 0 ? 0 : (diff + 23) / this.trackEl.getBoundingClientRect().height
+            const wrapSignalsHeight = this.$refs.wrapSignals.getBoundingClientRect().height;
+            const trackHeight = this.trackEl.getBoundingClientRect().height;
+            const caretHeight = this.caretEl.getBoundingClientRect().height;
+            // от высоты контента отнимаем две высоты трека ползунка, чтобы узнать сколько доп. пискселей
+            let diff = wrapSignalsHeight - (trackHeight * 2);
+            console.log({ diff })
+            this.dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight);
+            console.log("Высота трека", trackHeight)
+            console.log("высота контента",wrapSignalsHeight)
+            console.log("количество дополнительных пикселей", this.dopPixel)
 
             document.onpointermove = this.pointerMoveHandler //тащим ползунок
-            document.onpointerup = this.poiterUpHandler // отпускаем ползунок и очищаем события
+            document.onpointerup = this.pointerUpHandler // отпускаем ползунок и очищаем события
         },
+        pointerMoveHandler(event) {
+          const currentCoordinate = event.pageY;
+          const diff = this.currentPosition + (currentCoordinate - this.firstCoordinate);
+          const diffScroll = this.dopPixel ? diff + (diff * this.dopPixel) : diff;
+          const caretElTop = this.caretEl.getBoundingClientRect().top;
+          const getCoordinate = this.getCoordinate();
+
+          const index = getCoordinate.findIndex(offsetTop => offsetTop > caretElTop);
+          this.indexHovered = index > -1 ? index - 1 : getCoordinate.length - 1;
+
+
+          if (diff <= 0) {
+            this.caretEl.style.transform = "translate3d(0, 0, 0)";
+            return;
+          }
+          if (diff >= this.maxPosition) {
+            console.log("maxposition", this.maxPosition)
+            this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`;
+            return
+          }
+          this.caretEl.style.transform = `translate3d(0, ${diff}px, 0)`;
+          if (diff < this.maxScroll) {
+            this.wrapSignalsEl.style.transform = `translate3d(0, ${diffScroll * -1}px, 0)`;
+          }
+
+        },
+        pointerUpHandler() {
+          document.onpointermove = null; //очищаем события
+          document.onpointerup = null; // очищаем события
+          this.pressed = false;
+          this.caretEl = null;
+          this.trackEl = null;
+          this.wrapSignalsEl = null;
+          this.firstCoordinate = null;
+          this.currentPosition = null;
+          this.maxPosition = null;
+          this.maxScroll = null;
+          const findPart = this.arrSignals.find((_, index) => index === this.indexHovered);
+          this.$emit("setPart", findPart.part);
+          },
         goToSection(e, ind) {
             if (ind === this.indexHovered) return;
             const findPart = this.arrSignals.find((_, index) => index === ind);
