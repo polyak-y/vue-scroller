@@ -44,19 +44,26 @@ export default {
   :root
     --index: calc(1vh + 1vw)
 
+  body
+    margin: 0
+    padding: 0
+    min-height 100vh
+    background #F0F9FF
+    display flex
+    flex-direction column
+
   body * 
     margin 0
     padding 0
     box-sizing border-box
 
   .App
+    flex-grow 1
     display: flex
     padding 8px
     gap 8px
-    min-width calc(100vw -  16px)
-    max-width calc(100vw -  16px)
-    min-height calc(100vh - 16px)
-    max-height calc(100vh - 16px)
+    width calc(100vw -  16px)
+    height calc(100vh - 16px)
     margin 0
     overflow hidden
 </style>

@@ -53,11 +53,7 @@ export default {
             const caretHeight = this.caretEl.getBoundingClientRect().height;
             // от высоты контента отнимаем две высоты трека ползунка, чтобы узнать сколько доп. пискселей
             let diff = wrapSignalsHeight - (trackHeight * 2);
-            console.log({ diff })
-            this.dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight);
-            console.log("Высота трека", trackHeight)
-            console.log("высота контента",wrapSignalsHeight)
-            console.log("количество дополнительных пикселей", this.dopPixel)
+            this.dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight + 23 / 2);
 
             document.onpointermove = this.pointerMoveHandler //тащим ползунок
             document.onpointerup = this.pointerUpHandler // отпускаем ползунок и очищаем события
@@ -72,13 +68,11 @@ export default {
             const index = getCoordinate.findIndex(offsetTop => offsetTop > caretElTop);
             this.indexHovered = index > -1 ? index - 1 : getCoordinate.length - 1;
 
-
             if (diff <= 0) {
               this.caretEl.style.transform = "translate3d(0, 0, 0)";
               return;
             }
             if (diff >= this.maxPosition) {
-              console.log("maxposition", this.maxPosition)
               this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`;
               return
             }
@@ -124,7 +118,7 @@ export default {
 
             const caretHeight = caret.getBoundingClientRect().height;
             let diff = wrapSignalsHeight - (trackHeight * 2);
-            const dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight);
+            const dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight + 23 / 2);
 
             const objectForFunctions = {
                 distance,
@@ -143,7 +137,7 @@ export default {
             }
         },
         goBottom(objData) {
-            let distance = objData.distance;
+            let distance = objData.distance + 24;
             const wrapSignals = objData.wrapSignals;
             const maxScroll = objData.maxScroll;
             const caretPosition = objData.caretPosition;
@@ -153,49 +147,76 @@ export default {
 
             let diff = maxScroll - caretPosition; // смотрим сколько скролла еще осталось от каретки
             if (diff < 0) diff = 0;
-            distance += 26
-            console.log("смотрим сколько скролла еще осталось от каретки(diff)", diff)
-            console.log("Текущее положение каретки", caretPosition)
-            console.log("на каком расстоянии цель от каретки(distance):", distance + "px");
-            // сколько надо проскролить каретку
-            let scrollingCaret;
-            // сколько надо проскролить вверх контент
-            let scrollingContent
 
-            if (distance / 2 <= diff) {
-                console.log(1)
-                // сколько пикселей вниз прокручиваем каретку чтобы скролл контента был на 1px с учетом доп. пикселей
-                const caretPixel = 1 / (1 + dopPixel);
-                // общая скорость приближения каретки и цели (у каретки скорость caretPixel у цели 1)
-                const sumSpeed = 1 + caretPixel;
-                // через какой время каретка и цель встретяться
-                const meetingTime = distance / sumSpeed;
-                // умнощаем время встречи на скорость каретки и получаем расстояние встречи картеки и цели (для каретки)
-                scrollingCaret = caretPixel * meetingTime
-                scrollingContent = meetingTime               
-            } else if (distance > diff && diff > 0) {
-                console.log(2)
-                scrollingContent = diff;
-                scrollingCaret = (distance - diff)                
-            } else if (diff === 0) {
-                console.log(3)
-                scrollingCaret = distance;
+            // console.log("расстояни до цели(distance)", distance)
+            // console.log("сколько скролла осталось от каретки(diff)", diff)
+            // console.log("текущий скролл (wrapSignalsPosition)", wrapSignalsPosition)
+            // console.log("максимальный скролл(maxScroll)", maxScroll)
+
+            // скорость каретки в условную единицу
+             const speedCaret = 1 / (1 + dopPixel);
+            // скорость скролла в условную единицу
+            const speedScroll = !diff ? 0 : 1;
+            // общая скорость приближения каретки и скролла
+            const sumSpeed = speedScroll + speedCaret;
+            // через какой время каретка и цель встретяться
+            const meetingTime = distance / sumSpeed;
+            // сколько проедет каретка за указанное выше время
+            let scrollingCaret = speedCaret * meetingTime
+            console.log({ scrollingCaret })
+            // сколько проедет скролл за указанное выше время
+            let scrollingContent = meetingTime * speedScroll
+            if (diff < scrollingContent)  {
+              scrollingContent = diff
+              scrollingCaret = distance - diff
             }
+
             caret.style.transform = `translate3d(0px, ${caretPosition + scrollingCaret}px, 0px)`
             wrapSignals.style.transform = `translate3d(0px, ${(wrapSignalsPosition) - scrollingContent}px, 0px)`
         },
         goTop(objData) {
-          let distance = objData.distance;
+          let distance = objData.distance + 24;
           const wrapSignals = objData.wrapSignals;
           const maxScroll = objData.maxScroll;
           const caretPosition = objData.caretPosition;
           const wrapSignalsPosition = objData.wrapSignalsPosition;
           const caret = objData.caret;
           const dopPixel = objData.dopPixel;
-          console.log("скроллим вверх")
-          console.log("расстояние межу верхом каретки и верхом цели", distance)
-          console.log("расстояние на которое опущена каретка", caretPosition)
-          console.log("на какой скролл опущен контент")
+
+          let diff = maxScroll - caretPosition; // смотрим сколько скролла еще осталось от каретки
+          if (diff < 0) diff = 0;
+
+
+          console.log("расстояние межу верхом каретки и середины цели(distance)", distance)
+          console.log("расстояние на которое опущена каретка(caretPosition)", caretPosition)
+          console.log("на какой скролл опущен контент(wrapSignalsPosition)", wrapSignalsPosition)
+          console.log("Максимальный скролл(maxScroll)", maxScroll)
+          console.log("Сколько доп. пикселей(dopPixel)", dopPixel)
+
+          //=========================================================
+          // скорость каретки в условную единицу
+          const speedCaret = 1 / (1 + dopPixel);
+          // скорость скролла в условную единицу
+          const speedScroll = !diff ? 0 : 1;
+          // общая скорость приближения каретки и скролла
+          const sumSpeed = speedScroll + speedCaret;
+          // через какой время каретка и цель встретяться
+          const meetingTime = distance / sumSpeed;
+          // сколько проедет каретка за указанное выше время
+          let scrollingCaret = speedCaret * meetingTime
+          console.log({ scrollingCaret })
+          // сколько проедет скролл за указанное выше время
+          let scrollingContent = meetingTime * speedScroll
+          if (diff < scrollingContent)  {
+            scrollingContent = diff
+            scrollingCaret = distance - diff
+          }
+          //=========================================================
+
+
+
+          caret.style.transform = `translate3d(0px, ${caretPosition + scrollingCaret}px, 0px)`
+          wrapSignals.style.transform = `translate3d(0px, ${(wrapSignalsPosition) - scrollingContent}px, 0px)`
         }
     }
 }
