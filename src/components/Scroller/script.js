@@ -52,7 +52,7 @@ export default {
             const trackHeight = this.trackEl.getBoundingClientRect().height;
             const caretHeight = this.caretEl.getBoundingClientRect().height;
             // от высоты контента отнимаем две высоты трека ползунка, чтобы узнать сколько доп. пискселей
-            let diff = wrapSignalsHeight - (trackHeight * 2);
+            let diff = wrapSignalsHeight - (trackHeight * 2 + 23 / 2);
             this.dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight + 23 / 2);
 
             document.onpointermove = this.pointerMoveHandler //тащим ползунок
@@ -68,14 +68,12 @@ export default {
             const index = getCoordinate.findIndex(offsetTop => offsetTop > caretElTop);
             this.indexHovered = index > -1 ? index - 1 : getCoordinate.length - 1;
 
-            if (diff <= 5) {
+            if (diff <= 0) {
               this.caretEl.style.transform = "translate3d(0, 0, 0)";
-              this.wrapSignalsEl.style.transform = `translate3d(0, 0, 0)`;
               return;
             }
-            if (diff >= this.maxPosition - 5) {
+            if (diff >= this.maxPosition) {
               this.caretEl.style.transform = `translate3d(0, ${this.maxPosition}px, 0)`;
-              this.wrapSignalsEl.style.transform = `translate3d(0, -${this.maxScroll}px, 0)`
               return
             }
             this.caretEl.style.transform = `translate3d(0, ${diff}px, 0)`;
@@ -119,7 +117,7 @@ export default {
             const vector = distance < 0 ? "top" : "bottom";
 
             const caretHeight = caret.getBoundingClientRect().height;
-            let diff = wrapSignalsHeight - (trackHeight * 2);
+            let diff = wrapSignalsHeight - (trackHeight * 2 + 23 / 2);
             const dopPixel = diff <= 0 ? 0 : diff / (trackHeight - caretHeight + 23 / 2);
 
             const objectForFunctions = {
@@ -179,7 +177,7 @@ export default {
           const dopPixel = objData.dopPixel;
 
           let dopDistance = 0;
-          if (caretPosition > maxScroll) {
+          if (caretPosition > maxScroll && maxScroll > 0) {
             dopDistance = caretPosition - maxScroll
           }
           // скорость каретки в условную единицу
@@ -194,6 +192,11 @@ export default {
           let scrollingCaret = (speedCaret * meetingTime) + dopDistance
           // сколько проедет скролл за указанное выше время
           let scrollingContent = meetingTime * speedScroll
+
+          if (maxScroll === 0) {
+            scrollingContent = 0
+            scrollingCaret = distance
+          }
 
           caret.style.transform = `translate3d(0px, ${caretPosition + (scrollingCaret * -1)}px, 0px)`
           wrapSignals.style.transform = `translate3d(0px, ${(wrapSignalsPosition * -1) + scrollingContent}px, 0px)`
